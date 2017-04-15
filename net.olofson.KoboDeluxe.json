@@ -86,6 +86,7 @@
         {
             "name": "kobodeluxe",
             "rm-configure": true,
+            "make-install-args": ["kobo_scoredir=/tmp"],
             "sources": [
                 {
                     "type": "archive",
