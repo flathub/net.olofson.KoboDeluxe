@@ -66,6 +66,7 @@
         },
         {
             "name": "SDL_image",
+            "rm-configure": true,
             "config-opts": ["--disable-static"],
             "sources": [
                 {
