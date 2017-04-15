@@ -1,0 +1,79 @@
+From 0ab32d2f582a3b359aa1b978a0c1254249664f5e Mon Sep 17 00:00:00 2001
+From: Cosimo Cecchi <cosimoc@gnome.org>
+Date: Sat, 4 Mar 2017 19:37:09 -0800
+Subject: [PATCH] Store score data and configuration in XDG_CONFIG_HOME
+
+---
+ configure    |  2 +-
+ configure.in |  2 +-
+ filemap.cpp  | 22 ++++++++++++++++++++++
+ kobo.cpp     |  7 ++++++-
+ 4 files changed, 30 insertions(+), 3 deletions(-)
+
+diff --git a/configure b/configure
+index 90b3a55..c0d99c8 100755
+--- a/configure
++++ b/configure
+@@ -5027,7 +5027,7 @@ build_simple_bundle=no
+ unix_scoredir=yes
+ DATADIR='$(datadir)/kobo-deluxe'
+ SCOREDIR='$(sharedstatedir)/kobo-deluxe/scores'
+-CONFIGDIR='HOME>>'
++CONFIGDIR='XDGCONF>>'
+ CONFIGFILE='.kobodlrc'
+ EXEFILE=kobodl
+ case "$target_os" in
+diff --git a/filemap.cpp b/filemap.cpp
+index e0d75e8..39914c3 100644
+--- a/filemap.cpp
++++ b/filemap.cpp
+@@ -82,6 +82,28 @@ filemapper_t::filemapper_t()
+ 	char *home = (char *)getenv("HOME");
+ 	if(home)
+ 		addpath("HOME", home);
++
++	char *xdg_config_home = (char *)getenv("XDG_CONFIG_HOME");
++	char buf[300];
++
++	if(xdg_config_home)
++		snprintf(buf, 300, "%s/kobo-deluxe", xdg_config_home);
++	else if(home)
++		snprintf(buf, 300, "%s/.config/kobo-deluxe", home);
++	else
++		return;
++
++	int res = ::mkdir(buf, 0700);
++	int saved_errno = errno;
++	if (res == 0 || saved_errno == EEXIST)
++	{
++		addpath("XDGCONF", buf);
++	}
++	else
++	{
++		log_printf(ELOG, "filemapper_t failed to create config dir %s: %s!\n",
++			   buf, strerror(saved_errno));
++	}
+ }
+ 
+ 
+diff --git a/kobo.cpp b/kobo.cpp
+index 5ae1baa..b7b1f27 100644
+--- a/kobo.cpp
++++ b/kobo.cpp
+@@ -160,7 +160,12 @@ static void setup_dirs(char *xpath)
+ 	/*
+ 	 * Score files (user and global)
+ 	 */
+-	fmap->addpath("SCORES", KOBO_SCORE_DIR);
++	const char *fn = fmap->get("XDGCONF>>", FM_DIR);
++	char buf[1024];
++	snprintf(buf, sizeof(buf), "%s/scores", fn);
++	::mkdir(buf, 0700);
++	fmap->addpath("SCORES", "XDGCONF>>scores");
++
+ 	/* 'scores' in current dir (For importing scores, perhaps...) */
+ // (Disabled for now, since filemapper_t can't tell
+ // when it hits the same dir more than once...)
+-- 
+2.9.3
+

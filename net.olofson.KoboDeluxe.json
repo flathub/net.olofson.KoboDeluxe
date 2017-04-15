@@ -1,0 +1,122 @@
+{
+    "app-id": "net.olofson.KoboDeluxe",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.6",
+    "sdk": "org.freedesktop.Sdk",
+    "finish-args": [
+        "--device=dri",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=pulseaudio"
+    ],
+    "cleanup": [
+        "/com",
+        "/include",
+        "/lib/pkgconfig",
+        "/share/aclocal",
+        "/share/gtk-doc",
+        "/share/man",
+        "*.la", "*.a"
+    ],
+    "rename-appdata-file": "KoboDeluxe.appdata.xml",
+    "rename-desktop-file": "KoboDeluxe.desktop",
+    "rename-icon": "KoboDeluxe",
+    "command": "kobodl",
+    "modules": [
+        {
+            "name": "glu",
+            "config-opts": ["--disable-static"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://mesa.freedesktop.org/archive/glu/glu-9.0.0.tar.bz2",
+                    "sha256": "1f7ad0d379a722fcbd303aa5650c6d7d5544fde83196b42a73d1193568a4df12"
+                }
+            ]
+        },
+        {
+            "name": "SDL",
+            "rm-configure": true,
+            "config-opts": ["--disable-static"],
+            "cleanup": [
+                "/bin"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://www.libsdl.org/release/SDL-1.2.15.tar.gz",
+                    "sha256": "d6d316a793e5e348155f0dd93b979798933fb98aa1edebcc108829d6474aad00"
+                },
+                {
+                    "type": "patch",
+                    "path": "sdl-libx11-build.patch"
+                }
+            ]
+        },
+        {
+            "name": "SDL_image",
+            "config-opts": ["--disable-static"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12.tar.gz",
+                    "sha256": "0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699"
+                }
+            ]
+        },        
+        {
+            "name": "kobodeluxe",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://www.olofson.net/kobodl/download/KoboDeluxe-0.5.1.tar.bz2",
+                    "sha256": "0f7b910a399d985437564af8c5d81d6dcf22b96b26b01488d72baa6a6fdb5c2c"
+                },
+                {
+                    "type": "patch",
+                    "path": "kobodeluxe-window-signed-char.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "kobodeluxe-const-charp-conversion.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "kobodeluxe-enemies-pipe-decl.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "kobodeluxe-midicon-segmentation-fault.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "kobodeluxe-scores-dir-in-home.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "kobodeluxe-default-fullscreen.patch"
+                },
+                {
+                    "type": "file",
+                    "path": "KoboDeluxe.desktop"
+                },
+                {
+                    "type": "file",
+                    "path": "KoboDeluxe.png"
+                },
+                {
+                    "type": "file",
+                    "path": "KoboDeluxe.appdata.xml"
+                }
+            ],
+            "post-install": [
+                "mkdir -p /app/share/applications",
+                "cp KoboDeluxe.desktop /app/share/applications",
+                "mkdir -p /app/share/appdata",
+                "cp KoboDeluxe.appdata.xml /app/share/appdata",
+                "mkdir -p /app/share/icons/hicolor/128x128/apps",
+                "cp KoboDeluxe.png /app/share/icons/hicolor/128x128/apps"
+            ]
+        }
+    ]
+}
