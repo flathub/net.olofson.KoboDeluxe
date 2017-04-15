@@ -23,6 +23,19 @@ index 90b3a55..c0d99c8 100755
  CONFIGFILE='.kobodlrc'
  EXEFILE=kobodl
  case "$target_os" in
+diff --git a/configure.in b/configure.in
+index 8558e9c..5c5ac4e 100644
+--- a/configure.in
++++ b/configure.in
+@@ -34,7 +34,7 @@ build_simple_bundle=no
+ unix_scoredir=yes
+ DATADIR='$(datadir)/kobo-deluxe'
+ SCOREDIR='$(sharedstatedir)/kobo-deluxe/scores'
+-CONFIGDIR='HOME>>'
++CONFIGDIR='XDGCONF>>'
+ CONFIGFILE='.kobodlrc'
+ EXEFILE=kobodl
+ case "$target_os" in
 diff --git a/filemap.cpp b/filemap.cpp
 index e0d75e8..39914c3 100644
 --- a/filemap.cpp
@@ -75,5 +88,5 @@ index 5ae1baa..b7b1f27 100644
  // (Disabled for now, since filemapper_t can't tell
  // when it hits the same dir more than once...)
 -- 
-2.9.3
+2.12.2
 
