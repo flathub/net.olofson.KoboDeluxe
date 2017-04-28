@@ -24,55 +24,8 @@
     "command": "kobodl",
     "modules": [
         "shared-modules/glu/glu-9.0.0.json",
-        {
-            "name": "SDL",
-            "rm-configure": true,
-            "config-opts": ["--disable-static"],
-            "cleanup": [
-                "/bin"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://www.libsdl.org/release/SDL-1.2.15.tar.gz",
-                    "sha256": "d6d316a793e5e348155f0dd93b979798933fb98aa1edebcc108829d6474aad00"
-                },
-                {
-                    "type": "patch",
-                    "path": "sdl-libx11-build.patch"
-                },
-                {
-                    "type": "script",
-                    "path": "autogen.sh",
-                    "commands": [
-                        "sed -i -e 's/.*AM_PATH_ESD.*//' configure.in",
-                        "cp -p /usr/share/automake-*/config.{sub,guess} build-scripts",
-                        "aclocal",
-                        "libtoolize",
-                        "autoconf"
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "SDL_image",
-            "rm-configure": true,
-            "config-opts": ["--disable-static"],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12.tar.gz",
-                    "sha256": "0b90722984561004de84847744d566809dbb9daf732a9e503b91a1b5a84e5699"
-                },
-                {
-                    "type": "script",
-                    "path": "autogen.sh",
-                    "commands": [
-                        "AUTOMAKE=\"automake --foreign\" autoreconf -vfi"
-                    ]
-                }
-            ]
-        },        
+        "shared-modules/SDL/SDL-1.2.15.json",
+        "shared-modules/SDL/SDL_image-1.2.12.json",
         {
             "name": "kobodeluxe",
             "rm-configure": true,
@@ -85,7 +38,7 @@
                 },
                 {
                     "type": "script",
-                    "path": "autogen.sh",
+                    "dest-filename": "autogen.sh",
                     "commands": [
                         "cp -p /usr/share/automake-*/config.{sub,guess} .",
                         "aclocal",
