@@ -10,13 +10,7 @@
         "--socket=pulseaudio"
     ],
     "cleanup": [
-        "/com",
-        "/include",
-        "/lib/pkgconfig",
-        "/share/aclocal",
-        "/share/gtk-doc",
-        "/share/man",
-        "*.la", "*.a"
+        "*.a"
     ],
     "rename-appdata-file": "KoboDeluxe.appdata.xml",
     "rename-desktop-file": "KoboDeluxe.desktop",
