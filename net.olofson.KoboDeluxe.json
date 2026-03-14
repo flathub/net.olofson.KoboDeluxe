@@ -1,7 +1,7 @@
 {
     "app-id": "net.olofson.KoboDeluxe",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "23.08",
+    "runtime-version": "25.08",
     "sdk": "org.freedesktop.Sdk",
     "finish-args": [
         "--device=all",
@@ -16,7 +16,8 @@
         "/share/aclocal",
         "/share/gtk-doc",
         "/share/man",
-        "*.la", "*.a"
+        "*.la",
+        "*.a"
     ],
     "rename-appdata-file": "KoboDeluxe.appdata.xml",
     "rename-desktop-file": "KoboDeluxe.desktop",
@@ -32,9 +33,9 @@
             "make-install-args": ["kobo_scoredir=/tmp"],
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "http://www.olofson.net/kobodl/download/KoboDeluxe-0.5.1.tar.bz2",
-                    "sha256": "0f7b910a399d985437564af8c5d81d6dcf22b96b26b01488d72baa6a6fdb5c2c"
+                    "type": "git",
+                    "url": "https://github.com/olofson/kobodeluxe",
+                    "commit": "9f3a268b986c3b340f69e01265e23812f4d57b57"
                 },
                 {
                     "type": "script",
@@ -48,27 +49,9 @@
                 },
                 {
                     "type": "patch",
-                    "path": "kobodeluxe-window-signed-char.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "kobodeluxe-const-charp-conversion.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "kobodeluxe-enemies-pipe-decl.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "kobodeluxe-midicon-segmentation-fault.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "kobodeluxe-scores-dir-in-home.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "kobodeluxe-default-fullscreen.patch"
+                    "paths": [
+                        "patches/kobodeluxe-default-fullscreen.patch"
+                    ]
                 },
                 {
                     "type": "file",
@@ -84,12 +67,9 @@
                 }
             ],
             "post-install": [
-                "mkdir -p /app/share/applications",
-                "cp KoboDeluxe.desktop /app/share/applications",
-                "mkdir -p /app/share/appdata",
-                "cp KoboDeluxe.appdata.xml /app/share/appdata",
-                "mkdir -p /app/share/icons/hicolor/128x128/apps",
-                "cp KoboDeluxe.png /app/share/icons/hicolor/128x128/apps"
+                "install -Dm644 KoboDeluxe.desktop -t /app/share/applications/",
+                "install -Dm644 KoboDeluxe.appdata.xml -t /app/share/metainfo/",
+                "install -Dm644 KoboDeluxe.png -t /app/share/icons/hicolor/128x128/apps/"
             ]
         }
     ]
